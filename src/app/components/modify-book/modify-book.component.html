@@ -1,0 +1,19 @@
+<form [formGroup]="bookForm" (ngSubmit)="onSubmit()" class="container mt-5">
+  <div class="mb-3">
+    <label for="title" class="form-label">Title:</label>
+    <input type="text" class="form-control" id="title" formControlName="title" required>
+  </div>
+  <div class="mb-3">
+    <label for="author" class="form-label">Author:</label>
+    <input type="text" class="form-control" id="author" formControlName="author" required>
+  </div>
+  <div class="mb-3">
+    <label for="publicationDate" class="form-label">Publication Date:</label>
+    <input type="date" class="form-control" id="publicationDate" formControlName="publicationDate" required>
+  </div>
+  <div class="mb-3 form-check">
+    <input type="checkbox" class="form-check-input" id="isAvailable" formControlName="isAvailable">
+    <label class="form-check-label" for="isAvailable">Available</label>
+  </div>
+  <button type="submit" class="btn btn-primary" [disabled]="bookForm.invalid">Update Book</button>
+</form>

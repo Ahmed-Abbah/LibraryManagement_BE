@@ -1,0 +1,68 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light w-100 navigation">
+  <div class="container">
+    <a class="navbar-brand font-weight-bold" routerLink="/">Library Management</a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar"
+            aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+
+    </div>
+
+    <div class="navbar-buttons ml-auto">
+      <div class="d-flex">
+        <ng-container *ngIf="!authService.isAuthenticated; else loggedInButtons">
+          <a class="btn btn-dark mr-2" routerLink="/login" style="margin-right:5px;">Login</a>
+          <a class="btn btn-dark" routerLink="/register">Register</a>
+        </ng-container>
+        <ng-template #loggedInButtons>
+          <a class="btn btn-danger" (click)="handleLogout()" routerLink="/logout">Logout</a>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="row">
+
+  <div class="sidenav col-md-3" *ngIf="authService.isAuthenticated" id="leftNavbar">
+
+    <div class="top justify-content-center align-content-center mt-2">
+
+    </div>
+    <hr />
+
+    <div class="center">
+      <ul class="list-unstyled">
+        <li>
+          <a class="text-decoration-none" routerLink="">
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <br />
+        <li>
+          <a class="text-decoration-none" routerLink="/list-book">
+            <span>Books List</span>
+          </a>
+        </li>
+        <br />
+        <li>
+          <a class="text-decoration-none" routerLink="/add-book">
+            <span>Add Book</span>
+          </a>
+        </li>
+        <br />
+        
+        <br />
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-md-9" >
+    <router-outlet></router-outlet>
+  </div>
+
+
+</div> 
