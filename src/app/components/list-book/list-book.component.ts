@@ -2,6 +2,10 @@ import { Component } from '@angular/core';
 import { Book } from 'src/entities/Book';
 import { BooksService } from '../../services/books.service';
 import { Router } from '@angular/router';
+import { AuthenticationService } from 'src/app/services/authentication.service';
+
+
+import { BorrowsService } from 'src/app/services/borrows.service';
 
 @Component({
   selector: 'app-list-book',
@@ -11,7 +15,9 @@ import { Router } from '@angular/router';
 export class ListBookComponent {
   books: Book[] = [];
 
-  constructor(private booksService: BooksService, private router:Router) { }
+  constructor(private booksService: BooksService, private router:Router,
+    private authService:AuthenticationService,
+  private borrowService : BorrowsService) { }
 
   ngOnInit(): void {
     this.loadBooks();
@@ -30,9 +36,19 @@ export class ListBookComponent {
     );
   }
 
-  borrowBook(id: number): void {
+  borrowBook(bookId: number): void {
     // Implement borrow book functionality, e.g., redirect to borrow page with book ID
-    this.router.navigate(['/borrow', id]);
+    const userId : string | null = this.authService.loadLoggedUserId();
+    this.borrowService.borrowBook(userId,bookId).subscribe({
+      next: (data: any) : void => {
+        this.router.navigateByUrl("/list-book");
+      },
+      error: (err: any) : void => {
+        console.error(err);
+      }
+    });
+    console.log("clicked borrow bookid  : "+ bookId + " with user id : "+userId);
+    this.router.navigate(['/list-book']);
   }
 
   modifyBook(id: number): void {
@@ -63,4 +79,6 @@ export class ListBookComponent {
       return "Not Available";
     }
   }
+
+  
 }

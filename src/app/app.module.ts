@@ -13,15 +13,19 @@ import { ListBookComponent } from './components/list-book/list-book.component';
 import { StatusColorPipe } from './pipes/status-color.pipe';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
+import { authGuard} from './guards/auth-guard.guard';
+import { ListBorrowComponent } from './components/list-borrow/list-borrow.component';
 
 
 const routes: Routes = [
-  { path: 'add-book', component: AddBookComponent },
-  { path: 'modify-book/:id', component: ModifyBookComponent },
-  { path: 'list-book', component: ListBookComponent},
+  { path: 'add-book', component: AddBookComponent,canActivate : [authGuard] },
+  { path: 'modify-book/:id', component: ModifyBookComponent,canActivate : [authGuard] },
+  { path: 'list-book', component: ListBookComponent,canActivate : [authGuard]},
+  { path: 'list-borrow', component: ListBorrowComponent,canActivate : [authGuard]},
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent},
-  { path: '', redirectTo: '', pathMatch: 'full' }, // Redirect to add-book component by default
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+   // Redirect to add-book component by default
 ];
 
 
@@ -34,7 +38,8 @@ const routes: Routes = [
     ListBookComponent,
     StatusColorPipe,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ListBorrowComponent
   ],
   imports: [
     BrowserModule,

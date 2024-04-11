@@ -44,18 +44,21 @@
                 Update
               </button>
               &nbsp;
-              <button
-                type="button"
-                class="btn btn-main"
-                >
-              Borrow
-              </button>
+              
               <button
                 type="button"
                 class="btn btn-danger"
                 >
               Delete
               </button>
+
+              <button *ngIf="book.isAvailable"
+        type="button"
+        class="btn btn-primary green-button"
+        (click)="borrowBook(book.id)">
+  Borrow
+</button>
+
             </td>
           </tr>
         </tbody>

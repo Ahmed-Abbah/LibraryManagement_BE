@@ -15,7 +15,7 @@ export class AuthenticationService {
   isAuthenticated:boolean=false;
   roles:any;
   accessToken!:any;
-  username:any;
+  userId:any;
   constructor(private http:HttpClient,private router:Router) { }
 
   public login(username:string, password:string) : Observable<any>{
@@ -34,7 +34,8 @@ export class AuthenticationService {
     if (this.accessToken) {
       try {
         let decodedJwt: any = jwtDecode(this.accessToken);
-        this.username = decodedJwt.sub;
+        this.userId = decodedJwt.sub;
+        console.log("loggedIn user ID is :" + decodedJwt.sub);
         this.roles = decodedJwt.scope;
       
         window.localStorage.setItem("jwt-token", this.accessToken);
@@ -71,64 +72,72 @@ export class AuthenticationService {
     }
   }
 
+  loadLoggedUserId(): string | null {
+    const jwtToken = window.localStorage.getItem("jwt-token"); // Retrieve JWT token from local storage
+    if (jwtToken) {
+      // Decode JWT token to extract user ID
+      const decodedJwt: any = jwtDecode(jwtToken);
+      this.userId = decodedJwt.sub;
+      return this.userId;
+    } else {
+      console.error('JWT token not found in local storage');
+      return null;
+    }
+  }
+
 
 
   logout() {
     this.isAuthenticated=false;
     this.accessToken=undefined;
-    this.username=undefined;
+    this.userId=undefined;
     this.roles=undefined;
     window.localStorage.removeItem("jwt-token");
     this.router.navigateByUrl("/login");
   }
 
-  loadJwtTokenFromLocalStorage() {
-    let token = window.localStorage.getItem("jwt-token");
+  loadJwtTokenFromLocalStorage(): boolean {
+    const token = window.localStorage.getItem("jwt-token");
+
     if (token) {
+        let decodedJwt: any;
 
-      let decodedJwt: any;
-      try {
-        decodedJwt = jwtDecode(token);
-        
-      } catch (error) {
-
-        console.error('Error decoding JWT:', error);
-        return;
-      }
-
-
-      if (decodedJwt && decodedJwt.exp) {
-        const expirationTimestamp = decodedJwt.exp * 1000; 
-        const currentTimestamp = Date.now();
-
-
-        if (currentTimestamp > expirationTimestamp && this.isAuthenticated) {
-
-          Swal.fire({
-            position: 'center',
-            icon: 'warning',
-            title: 'Your session has expired. Please log in again.',
-            showConfirmButton: false,
-            timer: 3000
-          });
-
-
-          this.router.navigateByUrl("/logout");
-          return;
+        try {
+            decodedJwt = jwtDecode(token);
+        } catch (error) {
+            alert("Error decoding JWT");
+            console.error('Error decoding JWT:', error);
+            console.log('Returning false due to JWT decoding error');
+            return false;
         }
-      }
-    } else {
 
-      Swal.fire({
-        position: 'center',
-        icon: 'error',
-        title: 'Incorrect email or password!',
-        showConfirmButton: false,
-        timer: 1000
-      });
-      this.router.navigateByUrl("/logout");
+        if (decodedJwt && decodedJwt.exp) {
+            const expirationTimestamp = decodedJwt.exp * 1000;
+            const currentTimestamp = Date.now();
+
+            if (currentTimestamp > expirationTimestamp) {
+                // Token has expired
+                console.log('Returning false due to token expiration');
+                return false;
+            } else {
+                // Token is still valid
+                console.log('Returning true because token is still valid');
+                return true;
+            }
+        } else {
+            // Invalid JWT format
+            console.error('Invalid JWT format');
+            console.log('Returning false due to invalid JWT format');
+            return false;
+        }
+    } else {
+        // Token not found in localStorage
+        console.log('Returning false because token not found in localStorage');
+        return false;
     }
-  }
+}
+
+
 
 
 }

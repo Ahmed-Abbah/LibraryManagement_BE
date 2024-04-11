@@ -26,9 +26,7 @@ export class LoginComponent implements OnInit {
     
     this.authService.login(username, pwd).subscribe({
       next: (data: any) : void => {
-        console.log(username);
-        console.log(pwd);
-        console.log(data);
+        
         this.authService.loadProfile(data);
         this.router.navigateByUrl("/list-book");
       },
