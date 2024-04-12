@@ -11,6 +11,7 @@ export class NavbarComponent {
   constructor(public authService:AuthenticationService, private router:Router) { }
 
   ngOnInit(): void {
+    
   }
   handleLogout() {
     this.authService.logout();

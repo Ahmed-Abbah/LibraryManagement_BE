@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { BorrowsService } from 'src/app/services/borrows.service';
+import { Utils } from 'src/app/utils/Utils';
 import { Borrow } from 'src/entities/Borrows';
 
 @Component({
@@ -17,13 +18,17 @@ export class ListBorrowComponent {
 
   ngOnInit(){
     this.getUserBorrows();
+    $(document).ready( function () {
+      $('#borrowListDatatable').DataTable();
+    });
   }
 
-  returnBook(borrowId: number) {
+  returnBook(borrowId: number | undefined) {
     this.borrowsService.returnBook(borrowId).subscribe(
       {
         next :(next) => {
-          this.router.navigate(["/borrows"]);
+          Utils.showSweetAlert("success","Book returned successfully","success");
+          window.location.reload();
         },
         error : (error)=>{
           console.log(error);

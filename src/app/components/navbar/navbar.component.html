@@ -13,7 +13,7 @@
 
     <div class="navbar-buttons ml-auto">
       <div class="d-flex">
-        <ng-container *ngIf="!authService.isAuthenticated; else loggedInButtons">
+        <ng-container *ngIf="!authService.loadJwtTokenFromLocalStorage(); else loggedInButtons">
           <a class="btn btn-dark mr-2" routerLink="/login" style="margin-right:5px;">Login</a>
           <a class="btn btn-dark" routerLink="/register">Register</a>
         </ng-container>
@@ -27,7 +27,7 @@
 
 <div class="row">
 
-  <div class="sidenav col-md-3" *ngIf="authService.isAuthenticated" id="leftNavbar">
+  <div class="sidenav col-md-3" *ngIf="authService.loadJwtTokenFromLocalStorage()" id="leftNavbar">
 
     <div class="top justify-content-center align-content-center mt-2">
 
@@ -37,7 +37,7 @@
     <div class="center">
       <ul class="list-unstyled">
         <li>
-          <a class="text-decoration-none" routerLink="">
+          <a class="text-decoration-none" >
             <span>Dashboard</span>
           </a>
         </li>

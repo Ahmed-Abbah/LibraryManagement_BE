@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { Utils } from 'src/app/utils/Utils';
 import { User } from 'src/entities/User';
 import Swal from 'sweetalert2';
 
@@ -16,6 +17,10 @@ export class RegisterComponent {
   constructor(private formBuilder: FormBuilder, private authService:AuthenticationService, private router:Router) { }
 
   ngOnInit(): void {
+    if(this.authService.loadJwtTokenFromLocalStorage()){
+      Utils.showSweetAlert("Info","Already logged In, please log out first","info");
+      this.router.navigate(['/list-book']);
+    }
     this.initializeForm();
   }
 

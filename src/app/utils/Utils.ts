@@ -5,8 +5,7 @@ import Swal from "sweetalert2";
             Swal.fire({
                 title: title,
                 text: message,
-                icon: icon,
-                confirmButtonText: 'OK'
+                icon: icon
             });
         }
     }

@@ -45,19 +45,11 @@ export class AuthenticationService {
           icon: 'success',
           title: 'Logged In successfully',
           showConfirmButton: false,
-          timer: 1500
+          timer: 1000
         })
         this.router.navigateByUrl("/");
       } catch (error) {
         console.error('Error decoding JWT:', error);
-
-        Swal.fire({
-          position: 'center',
-          icon: 'error',
-          title: 'Incorrect email or password !',
-          showConfirmButton: false,
-          timer: 1000
-        })
       }
     } else {
       console.error('Invalid or missing token.');
@@ -67,25 +59,21 @@ export class AuthenticationService {
         icon: 'error',
         title: 'Incorrect email or password !',
         showConfirmButton: false,
-        timer: 1000
+        timer: 500
       })
     }
   }
 
   loadLoggedUserId(): string | null {
-    const jwtToken = window.localStorage.getItem("jwt-token"); // Retrieve JWT token from local storage
+    const jwtToken = window.localStorage.getItem("jwt-token");
     if (jwtToken) {
-      // Decode JWT token to extract user ID
       const decodedJwt: any = jwtDecode(jwtToken);
       this.userId = decodedJwt.sub;
       return this.userId;
     } else {
-      console.error('JWT token not found in local storage');
       return null;
     }
   }
-
-
 
   logout() {
     this.isAuthenticated=false;
@@ -101,38 +89,24 @@ export class AuthenticationService {
 
     if (token) {
         let decodedJwt: any;
-
         try {
             decodedJwt = jwtDecode(token);
         } catch (error) {
-            alert("Error decoding JWT");
-            console.error('Error decoding JWT:', error);
-            console.log('Returning false due to JWT decoding error');
             return false;
         }
-
         if (decodedJwt && decodedJwt.exp) {
             const expirationTimestamp = decodedJwt.exp * 1000;
             const currentTimestamp = Date.now();
 
             if (currentTimestamp > expirationTimestamp) {
-                // Token has expired
-                console.log('Returning false due to token expiration');
                 return false;
             } else {
-                // Token is still valid
-                console.log('Returning true because token is still valid');
                 return true;
             }
         } else {
-            // Invalid JWT format
-            console.error('Invalid JWT format');
-            console.log('Returning false due to invalid JWT format');
             return false;
         }
     } else {
-        // Token not found in localStorage
-        console.log('Returning false because token not found in localStorage');
         return false;
     }
 }

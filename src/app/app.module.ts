@@ -15,6 +15,9 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { authGuard} from './guards/auth-guard.guard';
 import { ListBorrowComponent } from './components/list-borrow/list-borrow.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import DataTables from 'datatables.net';
+
 
 
 const routes: Routes = [
@@ -46,7 +49,8 @@ const routes: Routes = [
     ReactiveFormsModule,
     RouterModule.forRoot(routes),
     HttpClientModule,
-    CommonModule
+    CommonModule,
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

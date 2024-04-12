@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { BooksService } from '../../services/books.service';
 import { Book } from 'src/entities/Book';
+import { Utils } from 'src/app/utils/Utils';
 
 @Component({
   selector: 'app-modify-book',
@@ -24,24 +25,26 @@ export class ModifyBookComponent {
   ngOnInit(): void {
     this.bookId = +this.route.snapshot.paramMap.get('id')!;
 
-    // Fetch book data from backend and populate the form
-    this.booksService.getBookById(this.bookId).subscribe(
-      (book) => {
+   
+    this.booksService.getBookById(this.bookId).subscribe({
+      next : (book) => {
         this.book = book;
         console.log(book); 
-        this.prefillForm(); // Prefill the form after fetching book data
+        this.prefillForm();
       },
-      (error) => {
+      error : (error) => {
         console.error('Error fetching book data', error);
       }
+    }
+      
     );
 
-    // Initialize the form
+   
     this.bookForm = this.fb.group({
       title: ['', Validators.required],
       author: ['', Validators.required],
       publicationDate: ['', Validators.required],
-      isAvailable: [false] // Assuming it's not required
+      isAvailable: [false] 
     });
 
     
@@ -54,8 +57,9 @@ export class ModifyBookComponent {
         {
           next : (response) => {
             console.log('Book updated successfully');
+            Utils.showSweetAlert("Success","Book modified successfully","success");
             this.router.navigate(['/list-book']);
-            // You can add further logic here, e.g., redirect to a different page
+
           },
           error : (error) => {
             console.error('Error updating book', error);
@@ -67,24 +71,24 @@ export class ModifyBookComponent {
 
   prefillForm(): void {
     if (this.book) {
-      // Update the form controls with book data
+
       this.bookForm.patchValue({
         title: this.book.title || '',
         author: this.book.author || '',
         isAvailable: this.book.isAvailable || false
       });
   
-      // Format publication date to "yyyy-MM-dd" format
-      const publicationDate = new Date(this.book.publicationDate); // Convert ISO string to Date object
+
+      const publicationDate = new Date(this.book.publicationDate);
   
-      if (!isNaN(publicationDate.getTime())) { // Check if the conversion was successful
+      if (!isNaN(publicationDate.getTime())) { 
         const year = publicationDate.getFullYear().toString();
-        const month = (publicationDate.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-indexed
+        const month = (publicationDate.getMonth() + 1).toString().padStart(2, '0');
         const day = publicationDate.getDate().toString().padStart(2, '0');
   
         const formattedPublicationDate = `${year}-${month}-${day}`;
   
-        // Set the formatted publication date in the form
+ 
         this.bookForm.patchValue({
           publicationDate: formattedPublicationDate
         });

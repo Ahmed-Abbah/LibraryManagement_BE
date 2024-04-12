@@ -15,5 +15,6 @@
     <input type="checkbox" class="form-check-input" id="isAvailable" formControlName="isAvailable">
     <label class="form-check-label" for="isAvailable">Available</label>
   </div>
-  <button type="submit" class="btn btn-primary" [disabled]="bookForm.invalid">Update Book</button>
+  <button type="submit" class="btn btn-primary" [disabled]="bookForm.invalid">Update Book</button> &nbsp;
+  <button  type="submit" class="btn btn" routerLink="/list-book" >Cancel</button>
 </form>

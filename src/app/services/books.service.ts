@@ -10,7 +10,7 @@ export class BooksService {
 
   constructor(private http:HttpClient) { }
 
-  private baseUrl = 'http://localhost:3000/books'; // Replace with your actual backend URL
+  private baseUrl = 'http://localhost:3000/books'; 
 
   getAllBooks(): Observable<Book[]> {
     return this.http.get<Book[]>(`${this.baseUrl}`);

@@ -1,79 +1,59 @@
-
-
-
-  <section class="section products-main">
-    <div class="container" >
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
-          <div class="title text-center">
-            <h2>Books List</h2>
-          </div>
+<section class="section products-main">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="title text-center">
+          <h2>Books List</h2>
         </div>
       </div>
-
-
-        <button type="button" class="btn btn-primary" routerLink="/add-book">
-          Add new Book
-        </button><br>
-        <br>
-        <table
-        class="table table-striped table-bordered table-sm row-border hover"
-        id="datatableexample"
-      >
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Publication Date</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let book of books">
-            <td>{{ book.title }}</td>
-            <td>{{ book.author }}</td>
-            <td >{{ formatDate(book.publicationDate) }}</td>
-            <td [style.color]="book.isAvailable | statusColor" >{{ getStatus(book.isAvailable) }}</td>
-            
-            <td>
-              <button
-              type="button" class="btn btn-primary"
-              routerLink="/modify-book/{{book.id}}"
-              >
-                Update
-              </button>
-              &nbsp;
-              
-              <button
-                type="button"
-                class="btn btn-danger"
-                >
-              Delete
-              </button>
-
-              <button *ngIf="book.isAvailable"
-        type="button"
-        class="btn btn-primary green-button"
-        (click)="borrowBook(book.id)">
-  Borrow
-</button>
-
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
 
-   
+    <button type="button" class="btn btn-primary" routerLink="/add-book">
+      Add new Book
+    </button><br>
+    <br>
 
-  </section>
+    <!-- Add DataTable -->
+    <table class="table table-striped table-bordered table-sm row-border hover" id="listBookDatable">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Publication Date</th>
+          <th>Status</th>
+          <th style="width:25%;">Actions</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let book of books">
+          <td>{{ book.title }}</td>
+          <td>{{ book.author }}</td>
+          <td>{{ formatDate(book.publicationDate) }}</td>
+          <td [style.color]="book.isAvailable | statusColor">{{ getStatus(book.isAvailable) }}</td>
+
+          <td>
+            <button type="button" class="btn btn-primary" routerLink="/modify-book/{{book.id}}">
+              Update
+            </button>
+            &nbsp;
+
+            <button type="button" class="btn btn-danger" (click)="borrowBook(book.id)">
+              Delete
+            </button>
+            &nbsp;
+            <button *ngIf="book.isAvailable" type="button" class="btn btn-primary green-button" (click)="borrowBook(book.id)">
+              Borrow
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Include DataTables CSS and JS -->
 
 
+<!-- Initialize DataTable -->
 
-
-
-
-
-  
-  

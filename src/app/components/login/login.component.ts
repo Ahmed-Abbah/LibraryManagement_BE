@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { Utils } from 'src/app/utils/Utils';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +15,10 @@ export class LoginComponent implements OnInit {
   constructor(private fb : FormBuilder, private authService:AuthenticationService, private router:Router) { }
 
   ngOnInit(): void {
+    if(this.authService.loadJwtTokenFromLocalStorage()){
+      Utils.showSweetAlert("Info","Already logged In, please log out first","info");
+      this.router.navigate(['/list-book']);
+    }
     this.formLogin=this.fb.group({
       username:this.fb.control(''),
       password:this.fb.control('')
@@ -33,9 +38,9 @@ export class LoginComponent implements OnInit {
       error: (err: any) : void => {
         console.error(err);
         if (err.status === 401) {
-          alert('Invalid username or password. Please try again.');
+          Utils.showSweetAlert("","Invalid Username or password",'error');
         } else {
-          alert('An error occurred during login. Please try again later.');
+          Utils.showSweetAlert("error","An error occurred during login. Please try again later.",'error');
         }
       }
     });
